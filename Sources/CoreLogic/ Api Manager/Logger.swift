@@ -1,6 +1,6 @@
 //
 //  Logger.swift
-//  CloudKart
+//  CoreLogicRealState
 //
 //  Created by Mobilecoderz1 on 26/07/20.
 //  Copyright © 2020 Admin. All rights reserved.

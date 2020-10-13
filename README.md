@@ -1,3 +1,6 @@
 # CoreLogic
 
-A description of this package.
+Fetch Real State data using CoreLogic Api's
+
+
+USAGE

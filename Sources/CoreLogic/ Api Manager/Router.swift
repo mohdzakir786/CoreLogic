@@ -12,6 +12,10 @@ public enum Router {
     public typealias Params = [String: Any]
     case authenticate(params: Params)
     case matchAddress(params: Params)
+    case corePropertyAttributes(propertyId: Int)
+    case propertylocation(propertyId: Int)
+    case places(localityId: Int)
+    case schoolDetail(placeId: Int)
 
 }
 
@@ -22,9 +26,9 @@ extension Router:  Alamofire.URLRequestConvertible {
         var baseURL: URL {
             switch self {
             case .authenticate:
-                return URL(string: "https://access-api.corelogic.asia/access/oauth")!
+                return URL(string: "https://api-uat.corelogic.asia/access/oauth")!//"https://access-api.corelogic.asia/access/oauth")!
             default:
-                return URL(string: "https://api-uat.corelogic.asia/sandbox")!
+                return URL(string: "https://api-uat.corelogic.asia")!
             }
         }
         var urlRequest = URLRequest(url: baseURL.appendingPathComponent(config.path))
@@ -57,7 +61,16 @@ extension Router {
         case .authenticate(let params):
             return ("/token", params, .get)
         case .matchAddress(let params):
-              return ("search/au/matcher/address", params, .get)
+            return ("search/au/matcher/address", params, .get)
+        case .corePropertyAttributes(let propertyId):
+            return ("property-details/au/properties/\(propertyId)/attributes/core", nil, .get)
+        case .propertylocation(let propertyId):
+            return ("property-details/au/properties/\(propertyId)/location", nil, .get)
+        case .places(let localityId):
+            return ("places/search/locality/\(localityId)", nil, .get)
+        case .schoolDetail(let placeId):
+              return ("places/\(placeId)", nil, .get)
         }
     }
 }
+

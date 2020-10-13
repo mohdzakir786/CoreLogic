@@ -1,6 +1,6 @@
 //
 //  CommonResponse.swift
-//  CloudKart
+//  CoreLogicRealState
 //
 //  Created by Admin on 26/06/20.
 //  Copyright © 2020 Admin. All rights reserved.
@@ -8,37 +8,6 @@
 
 import Foundation
 
-struct User: Decodable {
-    let message: String?
-    let code: Int?
-    let data: UserData?
-    let token: String?
-    let count:Int?
-    let address_ctr:Int?
-    let errors:[ErrorModel]?
-}
-struct ErrorModel:Decodable {
-    let message: String?
-}
-
-
-// MARK: - DataClass
-struct UserData: Codable {
-    let addr_streetNo:String?
-    let addr_city:String?
-    let addr_barangay:String?
-    let addr_zipcode:String?
-    let addr_barangayID:Int?
-    let addr_cityID:Int?
-    let addr_provinceID:Int?
-    let gender:String?
-    let custID, lname, fname, mname: String?
-    let mobileNo:String?
-    let bday:String?
-    let email:String?
-    let avatar:String?
-
-}
 public struct CLAuthenticationModel: Decodable {
     public init(accessToken: String, tokenType: String, expiresIn: Int, scope: String, iss: String, envAccessRestrict: Bool, geoCodes: [String], roles: [String], sourceExclusion: [String]) {
         self.accessToken = accessToken
@@ -66,44 +35,115 @@ public struct CLMatchAddressModel: Decodable {
         self.matchDetails = matchDetails
     }
     
-    public let matchDetails: CLMatchDetails
+    public let matchDetails: CLMatchDetails?
 }
 public struct CLMatchDetails: Decodable {
-    public init(updateDetail: String, propertyId: Int?, matchType: String, matchRule: String, updateIndicator: String) {
-        self.updateDetail = updateDetail
-        self.propertyId = propertyId
-        self.matchType = matchType
-        self.matchRule = matchRule
-        self.updateIndicator = updateIndicator
-    }
-    
       public let updateDetail: String
       public let propertyId: Int?
       public let matchType, matchRule, updateIndicator: String
 }
 
 struct CLProperty: Decodable {
-    let contacts: [Contact]
+    let contacts: [CLContact]
 }
 
-struct Contact: Decodable {
-    let company: Company
+struct CLContact: Decodable {
+    let company: CLCompany
     let contactType: String
     let doNotCall, doNotMail: Bool
-    let person: Person
+    let person: CLPerson
     let phoneNumber: String
-    let postalAddress: PostalAddress
+    let postalAddress: CLPostalAddress
 }
 
-struct Company: Decodable {
+struct CLCompany: Decodable {
     let abn, acn, companyName: String
 }
 
-struct Person: Decodable {
+struct CLPerson: Decodable {
     let firstName, lastName: String
 }
 
-struct PostalAddress: Decodable {
+struct CLPostalAddress: Decodable {
     let addressCareOfText, addressLine1, addressLine2, country: String
     let postcode, state, suburb: String
+}
+
+struct CLErrorResponse: Decodable {
+    let errors: [CLErrorMessage]
+}
+struct CLErrorMessage: Decodable {
+    let msg: String
+}
+struct CLAuthErrorResponse: Decodable {
+    let messages: [CLAuthErrorMessage]
+}
+struct CLAuthErrorMessage: Decodable {
+    let type: String
+    let message: String
+}
+public struct CLCoreProperyDetail: Decodable {
+    public let propertyType, propertySubType: String?
+    public let beds, baths, carSpaces, lockUpGarages: Int?
+    public let landArea: Int?
+    public let isCalculatedLandArea: Bool?
+    public let landAreaSource: String?
+}
+ 
+
+public struct CLPropertyLocation: Codable {
+    public let singleLine, councilArea: String?
+    public let councilAreaId: Int?
+    public let state: String?
+    public let street: CLStreet?
+    public let postcode, locality: CLLocality?
+    public let longitude, latitude: Double?
+}
+
+
+public struct CLLocality: Codable {
+    public let id: Int?
+    public let singleLine, name: String?
+}
+
+public struct CLStreet: Codable {
+    public let id: Int?
+    public let singleLine, name, nameAndNumber: String?
+
+    
+}
+public struct CLSchoolPlace: Codable {
+    public let latitude, longitude: Double?
+    public let placeId: Int?
+    public let placeName, placeType: String?
+
+}
+public struct CLSchoolDetail: Codable {
+    public let hasShape: Bool
+    public let latitude: Double
+    public let localityId: Int
+    public let localityName: String
+    public let longitude: Double
+    public let placeId: Int
+    public let placeMetaData: CLPlaceMetaData
+    public let placeName, placeSingleLineAddress, placeType: String
+    public let postcodeId: Int
+    public let postcodeName: String
+}
+
+// MARK: - PlaceMetaData
+public struct CLPlaceMetaData: Codable {
+    public let school: [CLSchool]
+}
+
+// MARK: - School
+public struct CLSchool: Codable {
+    public let schoolName, schoolType: String
+    public let schoolGender, schoolSector: String
+    public let acaraSchoolId: Int
+    public let schoolWebsite: String
+    public let schoolYearLow, schoolYearHigh: String
+    public let schoolEnrolments: Int
+
+   
 }
